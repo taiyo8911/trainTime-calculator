@@ -5,186 +5,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>電車到着時刻予想システム</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        th,
-        td {
-            padding: 8px;
-            text-align: left;
-        }
-
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
-    <h1>電車到着時刻予想システム</h1>
-    <p>発車時刻を入力してください (HHMM 形式):</p>
-    <button onclick="setCurrentTime('kankouTimeInput'), setCurrentTime('kaisokuTimeInput')">現在時刻に設定</button>
-    <table id="timeTable">
-        <thead>
-            <tr>
-                <th></th>
-                <th>錦糸町</th>
-                <th>新小岩</th>
-                <th>市川</th>
-                <th>船橋</th>
-                <th>津田沼</th>
-                <th>稲毛</th>
-                <th>千葉</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>緩行</th>
-                <td>
-                    <div>
-                        <input type="number" id="kankouTimeInput" maxlength="4">
-                        <span id="kankouError" class="error"></span>
-                    </div>
-                </td>
-                <td id="kankouShinkoiwa"></td>
-                <td id="kankouIchikawa"></td>
-                <td id="kankouFunabashi"></td>
-                <td id="kankouTsudanuma"></td>
-                <td id="kankouInage"></td>
-                <td id="kankouChiba"></td>
-            </tr>
-            <tr>
-                <th>快速</th>
-                <td>
-                    <div>
-                        <input type="number" id="kaisokuTimeInput" maxlength="4">
-                        <span id="kaisokuError" class="error"></span>
-                    </div>
-                </td>
-                <td id="kaisokuShinkoiwa"></td>
-                <td id="kaisokuIchikawa"></td>
-                <td id="kaisokuFunabashi"></td>
-                <td id="kaisokuTsudanuma"></td>
-                <td id="kaisokuInage"></td>
-                <td id="kaisokuChiba"></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>電車到着時刻予想システム</h1>
+        <div class="input-section">
+            <p>発車時刻を入力してください (HHMM 形式):</p>
+            <button id="setCurrentTimeBtn" class="btn btn-secondary">現在時刻に設定</button>
+        </div>
 
-    <button onclick="updateTable()">予測計算</button>
-    <button onclick="resetTable()">リセット</button>
+        <table id="timeTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>錦糸町</th>
+                    <th>新小岩</th>
+                    <th>市川</th>
+                    <th>船橋</th>
+                    <th>津田沼</th>
+                    <th>稲毛</th>
+                    <th>千葉</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>緩行</th>
+                    <td>
+                        <div class="input-group">
+                            <input type="number" id="kankouTimeInput" maxlength="4" placeholder="例: 0800">
+                            <span id="kankouError" class="error"></span>
+                        </div>
+                    </td>
+                    <td id="kankouShinkoiwa" class="arrival-time"></td>
+                    <td id="kankouIchikawa" class="arrival-time"></td>
+                    <td id="kankouFunabashi" class="arrival-time"></td>
+                    <td id="kankouTsudanuma" class="arrival-time"></td>
+                    <td id="kankouInage" class="arrival-time"></td>
+                    <td id="kankouChiba" class="arrival-time"></td>
+                </tr>
+                <tr>
+                    <th>快速</th>
+                    <td>
+                        <div class="input-group">
+                            <input type="number" id="kaisokuTimeInput" maxlength="4" placeholder="例: 0800">
+                            <span id="kaisokuError" class="error"></span>
+                        </div>
+                    </td>
+                    <td id="kaisokuShinkoiwa" class="arrival-time"></td>
+                    <td id="kaisokuIchikawa" class="arrival-time"></td>
+                    <td id="kaisokuFunabashi" class="arrival-time"></td>
+                    <td id="kaisokuTsudanuma" class="arrival-time"></td>
+                    <td id="kaisokuInage" class="arrival-time"></td>
+                    <td id="kaisokuChiba" class="arrival-time"></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <script>
-        // 所要時間データ（分単位）
-        var travelTimes = {
-            kankou: {
-                Shinkoiwa: 7,
-                Ichikawa: 14,
-                Funabashi: 25,
-                Tsudanuma: 30,
-                Inage: 42,
-                Chiba: 47
-            },
-            kaisoku: {
-                Shinkoiwa: 3,
-                Ichikawa: 10,
-                Funabashi: 16,
-                Tsudanuma: 20,
-                Inage: 27,
-                Chiba: 31
-            }
-        };
+        <div class="button-group">
+            <button id="calculateBtn" class="btn btn-primary">予測計算</button>
+            <button id="resetBtn" class="btn btn-secondary">リセット</button>
+        </div>
+    </div>
 
-        // テーブルを更新する関数
-        function updateTable() {
-            // エラーメッセージをクリア
-            document.getElementById('kankouError').innerText = '';
-            document.getElementById('kaisokuError').innerText = '';
-
-            // 入力された時刻を取得
-            var kankouTime = document.getElementById('kankouTimeInput').value;
-            var kaisokuTime = document.getElementById('kaisokuTimeInput').value;
-
-            // 時刻が入力されていない場合はエラーメッセージを表示
-            var hasError = false;
-            if (!isValidTimeFormat(kankouTime)) {
-                document.getElementById('kankouError').innerText = '時刻を正しく入力してください。';
-                hasError = true;
-            }
-            if (!isValidTimeFormat(kaisokuTime)) {
-                document.getElementById('kaisokuError').innerText = '時刻を正しく入力してください。';
-                hasError = true;
-            }
-            if (hasError) {
-                return;
-            }
-
-            // 緩行の時刻を計算して表示
-            updateTimes('kankou', kankouTime, travelTimes.kankou);
-
-            // 快速の時刻を計算して表示
-            updateTimes('kaisoku', kaisokuTime, travelTimes.kaisoku);
-        }
-
-        // 時刻を計算して表示する関数
-        function updateTimes(type, startTime, times) {
-            var startHours = Number(startTime.substr(0, 2));
-            var startMinutes = Number(startTime.substr(2, 4));
-            var startTotalMinutes = startHours * 60 + startMinutes;
-
-            for (var place in times) {
-                if (times.hasOwnProperty(place)) {
-                    var travelTime = times[place];
-                    var arrivalTime = startTotalMinutes + travelTime;
-                    var arrivalHours = Math.floor(arrivalTime / 60) % 24;
-                    var arrivalMinutes = arrivalTime % 60;
-                    var formattedArrivalTime = padZero(arrivalHours) + ':' + padZero(arrivalMinutes);
-
-                    document.getElementById(type + place).innerText = formattedArrivalTime;
-                }
-            }
-        }
-
-        // 0埋め関数
-        function padZero(num) {
-            return num < 10 ? '0' + num : num;
-        }
-
-        // 時刻形式を確認する関数
-        function isValidTimeFormat(time) {
-            return /^\d{4}$/.test(time) && parseInt(time.slice(0, 2)) < 24 && parseInt(time.slice(2)) < 60;
-        }
-
-        // 現在時刻を設定する関数
-        function setCurrentTime(inputId) {
-            var now = new Date();
-            var hours = padZero(now.getHours());
-            var minutes = padZero(now.getMinutes());
-            document.getElementById(inputId).value = hours + '' + minutes;
-        }
-
-        // テーブルと入力フィールドをリセットする関数
-        function resetTable() {
-            document.getElementById('kankouTimeInput').value = '';
-            document.getElementById('kaisokuTimeInput').value = '';
-            document.getElementById('kankouError').innerText = '';
-            document.getElementById('kaisokuError').innerText = '';
-            var ids = ['kankouShinkoiwa', 'kankouIchikawa', 'kankouFunabashi', 'kankouTsudanuma', 'kankouInage', 'kankouChiba',
-                'kaisokuShinkoiwa', 'kaisokuIchikawa', 'kaisokuFunabashi', 'kaisokuTsudanuma', 'kaisokuInage', 'kaisokuChiba'];
-            for (var i = 0; i < ids.length; i++) {
-                document.getElementById(ids[i]).innerText = '';
-            }
-        }
-    </script>
+    <!-- JavaScript ファイルの読み込み -->
+    <script src="js/data/travelData.js"></script>
+    <script src="js/timeCalculator.js"></script>
+    <script src="js/uiController.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
