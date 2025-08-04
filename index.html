@@ -4,76 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>電車到着時刻予想システム</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>到着予想システム</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>電車到着時刻予想システム</h1>
-        <div class="input-section">
-            <p>発車時刻を入力してください (HHMM 形式):</p>
-            <button id="setCurrentTimeBtn" class="btn btn-secondary">現在時刻に設定</button>
-        </div>
+    <h1>到着予想システム</h1>
+    <p>発車時刻を入力してください (HHMM 形式):</p>
+    <button onclick="setCurrentTime('kankouTimeInput'), setCurrentTime('kaisokuTimeInput')">現在時刻に設定</button>
+    <table id="timeTable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>錦糸町</th>
+                <th>新小岩</th>
+                <th>市川</th>
+                <th>船橋</th>
+                <th>津田沼</th>
+                <th>稲毛</th>
+                <th>千葉</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>緩行</th>
+                <td>
+                    <div>
+                        <input type="number" id="kankouTimeInput" maxlength="4">
+                        <span id="kankouError" class="error"></span>
+                    </div>
+                </td>
+                <td id="kankouShinkoiwa"></td>
+                <td id="kankouIchikawa"></td>
+                <td id="kankouFunabashi"></td>
+                <td id="kankouTsudanuma"></td>
+                <td id="kankouInage"></td>
+                <td id="kankouChiba"></td>
+            </tr>
+            <tr>
+                <th>快速</th>
+                <td>
+                    <div>
+                        <input type="number" id="kaisokuTimeInput" maxlength="4">
+                        <span id="kaisokuError" class="error"></span>
+                    </div>
+                </td>
+                <td id="kaisokuShinkoiwa"></td>
+                <td id="kaisokuIchikawa"></td>
+                <td id="kaisokuFunabashi"></td>
+                <td id="kaisokuTsudanuma"></td>
+                <td id="kaisokuInage"></td>
+                <td id="kaisokuChiba"></td>
+            </tr>
+        </tbody>
+    </table>
 
-        <table id="timeTable">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>錦糸町</th>
-                    <th>新小岩</th>
-                    <th>市川</th>
-                    <th>船橋</th>
-                    <th>津田沼</th>
-                    <th>稲毛</th>
-                    <th>千葉</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>緩行</th>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" id="kankouTimeInput" maxlength="4" placeholder="例: 0800">
-                            <span id="kankouError" class="error"></span>
-                        </div>
-                    </td>
-                    <td id="kankouShinkoiwa" class="arrival-time"></td>
-                    <td id="kankouIchikawa" class="arrival-time"></td>
-                    <td id="kankouFunabashi" class="arrival-time"></td>
-                    <td id="kankouTsudanuma" class="arrival-time"></td>
-                    <td id="kankouInage" class="arrival-time"></td>
-                    <td id="kankouChiba" class="arrival-time"></td>
-                </tr>
-                <tr>
-                    <th>快速</th>
-                    <td>
-                        <div class="input-group">
-                            <input type="number" id="kaisokuTimeInput" maxlength="4" placeholder="例: 0800">
-                            <span id="kaisokuError" class="error"></span>
-                        </div>
-                    </td>
-                    <td id="kaisokuShinkoiwa" class="arrival-time"></td>
-                    <td id="kaisokuIchikawa" class="arrival-time"></td>
-                    <td id="kaisokuFunabashi" class="arrival-time"></td>
-                    <td id="kaisokuTsudanuma" class="arrival-time"></td>
-                    <td id="kaisokuInage" class="arrival-time"></td>
-                    <td id="kaisokuChiba" class="arrival-time"></td>
-                </tr>
-            </tbody>
-        </table>
+    <button onclick="updateTable()">予測計算</button>
+    <button onclick="resetTable()">リセット</button>
 
-        <div class="button-group">
-            <button id="calculateBtn" class="btn btn-primary">予測計算</button>
-            <button id="resetBtn" class="btn btn-secondary">リセット</button>
-        </div>
-    </div>
-
-    <!-- JavaScript ファイルの読み込み -->
-    <script src="js/data/travelData.js"></script>
-    <script src="js/timeCalculator.js"></script>
-    <script src="js/uiController.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>
