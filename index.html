@@ -11,13 +11,11 @@
     <body>
         <h1>緩急分離運転到着予想システム</h1>
 
-        <div class="description">
-            複々線区間において、緩行線（各駅停車）と急行線（速達列車）を分離して運転する方式の到着時刻を計算します。
-        </div>
+        <p>緩急分離運転の到着時刻を予測計算します。どちらが早く到着するかを比較できるシステム。出発駅と方向を選択して、予測計算を行ってください。</p>
 
         <!-- 出発駅・方向選択UI -->
-        <div class="selection-area">
-            <div class="selection-item">
+        <div>
+            <div>
                 <label for="departureStation">出発駅:</label>
                 <select id="departureStation" onchange="updateTableStructure()">
                     <option value="錦糸町">錦糸町</option>
@@ -30,7 +28,7 @@
                 </select>
             </div>
 
-            <div class="selection-item">
+            <div>
                 <label>方向:</label>
                 <div class="radio-group">
                     <label>
@@ -47,9 +45,7 @@
         </div>
 
         <!-- 時刻設定ボタン -->
-        <div class="button-area">
-            <button onclick="setCurrentTime()">現在時刻に設定</button>
-        </div>
+        <button onclick="setCurrentTime()">現在時刻に設定</button>
 
         <!-- 動的に生成される時刻表 -->
         <table id="timeTable">
@@ -66,15 +62,9 @@
         </table>
 
         <!-- 操作ボタン -->
-        <div class="button-area">
-            <button onclick="updateTable()">予測計算</button>
-            <button onclick="resetTable()">リセット</button>
-        </div>
+        <button onclick="updateTable()">予測計算</button>
+        <button onclick="resetTable()">リセット</button>
 
-        <!-- 初期化メッセージ -->
-        <div id="initialMessage" class="initial-message">
-            出発駅と方向を選択して、緩急分離運転の到着時刻を計算してください。
-        </div>
 
         <script src="js/data.js"></script>
         <script src="js/script.js"></script>
@@ -83,7 +73,7 @@
         <script>
             // ページ読み込み時の初期化
             document.addEventListener('DOMContentLoaded', function () {
-                // デフォルトで錦糸町・千葉方面を選択
+                // デフォルトで出発駅：錦糸町・方向：千葉方面を選択
                 document.getElementById('departureStation').value = '錦糸町';
                 document.querySelector('input[name="direction"][value="千葉方面"]').checked = true;
                 updateTableStructure();
