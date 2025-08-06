@@ -13,7 +13,6 @@
 
         <p>緩急分離運転線区においてどちらが早く到着するかを比較できるシステム。出発駅と方向を選択してください。</p>
 
-        <!-- 出発駅・方向選択UI -->
         <div>
             <div>
                 <label for="departureStation">出発駅:</label>
@@ -30,26 +29,25 @@
 
             <div>
                 <label>方向:</label>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="direction" value="千葉方面" onchange="updateTableStructure()">
-                        千葉方面
-                    </label>
-                    <label>
-                        <input type="radio" name="direction" value="錦糸町方面" onchange="updateTableStructure()">
-                        錦糸町方面
-                    </label>
-                </div>
+                <label>
+                    <input type="radio" name="direction" value="千葉方面" onchange="updateTableStructure()">
+                    千葉方面
+                </label>
+                <label>
+                    <input type="radio" name="direction" value="錦糸町方面" onchange="updateTableStructure()">
+                    錦糸町方面
+                </label>
                 <span id="directionError" class="error"></span>
             </div>
+
+            <div>
+                <!-- 時刻設定ボタン -->
+                <button onclick="setCurrentTime()">現在時刻に設定</button>
+                <!-- 操作ボタン -->
+                <button onclick="updateTable()">予測計算</button>
+                <button onclick="resetTable()">リセット</button>
+            </div>
         </div>
-
-        <!-- 時刻設定ボタン -->
-        <button onclick="setCurrentTime()">現在時刻に設定</button>
-
-        <!-- 操作ボタン -->
-        <button onclick="updateTable()">予測計算</button>
-        <button onclick="resetTable()">リセット</button>
 
         <!-- 動的に生成される時刻表 -->
         <table id="timeTable">
