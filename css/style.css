@@ -1,16 +1,27 @@
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
-table,
+/* 駅名列 */
+th:nth-child(1), td:nth-child(1) {
+    width: 15%;
+}
+
+/* 緩行列 */
+th:nth-child(2), td:nth-child(2) {
+    width: 35%;
+}
+
+/* 急行列 */
+th:nth-child(3), td:nth-child(3) {
+    width: 35%;
+}
+
 th,
 td {
     border: 1px solid black;
-}
-
-th,
-td {
     padding: 8px;
     text-align: left;
 }
