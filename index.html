@@ -11,7 +11,7 @@
     <body>
         <h1>緩急分離運転到着予想システム</h1>
 
-        <p>緩急分離運転の到着時刻を予測計算します。どちらが早く到着するかを比較できるシステム。出発駅と方向を選択して、予測計算を行ってください。</p>
+        <p>緩急分離運転線区においてどちらが早く到着するかを比較できるシステム。出発駅と方向を選択してください。</p>
 
         <!-- 出発駅・方向選択UI -->
         <div>
@@ -47,6 +47,10 @@
         <!-- 時刻設定ボタン -->
         <button onclick="setCurrentTime()">現在時刻に設定</button>
 
+        <!-- 操作ボタン -->
+        <button onclick="updateTable()">予測計算</button>
+        <button onclick="resetTable()">リセット</button>
+
         <!-- 動的に生成される時刻表 -->
         <table id="timeTable">
             <thead>
@@ -61,9 +65,7 @@
             </tbody>
         </table>
 
-        <!-- 操作ボタン -->
-        <button onclick="updateTable()">予測計算</button>
-        <button onclick="resetTable()">リセット</button>
+
 
 
         <script src="js/data.js"></script>
