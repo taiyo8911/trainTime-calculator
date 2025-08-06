@@ -1,69 +1,94 @@
 <!DOCTYPE html>
 <html lang="ja">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>到着予想システム</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>緩急分離運転到着予想システム</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
 
-<body>
-    <h1>到着予想システム</h1>
-    <p>発車時刻を入力してください (HHMM 形式):</p>
-    <button onclick="setCurrentTime('kankouTimeInput'), setCurrentTime('kaisokuTimeInput')">現在時刻に設定</button>
-    <table id="timeTable">
-        <thead>
-            <tr>
-                <th></th>
-                <th>錦糸町</th>
-                <th>新小岩</th>
-                <th>市川</th>
-                <th>船橋</th>
-                <th>津田沼</th>
-                <th>稲毛</th>
-                <th>千葉</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>緩行</th>
-                <td>
-                    <div>
-                        <input type="number" id="kankouTimeInput" maxlength="4">
-                        <span id="kankouError" class="error"></span>
-                    </div>
-                </td>
-                <td id="kankouShinkoiwa"></td>
-                <td id="kankouIchikawa"></td>
-                <td id="kankouFunabashi"></td>
-                <td id="kankouTsudanuma"></td>
-                <td id="kankouInage"></td>
-                <td id="kankouChiba"></td>
-            </tr>
-            <tr>
-                <th>快速</th>
-                <td>
-                    <div>
-                        <input type="number" id="kaisokuTimeInput" maxlength="4">
-                        <span id="kaisokuError" class="error"></span>
-                    </div>
-                </td>
-                <td id="kaisokuShinkoiwa"></td>
-                <td id="kaisokuIchikawa"></td>
-                <td id="kaisokuFunabashi"></td>
-                <td id="kaisokuTsudanuma"></td>
-                <td id="kaisokuInage"></td>
-                <td id="kaisokuChiba"></td>
-            </tr>
-        </tbody>
-    </table>
+    <body>
+        <h1>緩急分離運転到着予想システム</h1>
 
-    <button onclick="updateTable()">予測計算</button>
-    <button onclick="resetTable()">リセット</button>
+        <div class="description">
+            複々線区間において、緩行線（各駅停車）と急行線（速達列車）を分離して運転する方式の到着時刻を計算します。
+        </div>
 
-    <script src="js/data.js"></script>
-    <script src="js/script.js"></script>
-</body>
+        <!-- 出発駅・方向選択UI -->
+        <div class="selection-area">
+            <div class="selection-item">
+                <label for="departureStation">出発駅:</label>
+                <select id="departureStation" onchange="updateTableStructure()">
+                    <option value="錦糸町">錦糸町</option>
+                    <option value="新小岩">新小岩</option>
+                    <option value="市川">市川</option>
+                    <option value="船橋">船橋</option>
+                    <option value="津田沼">津田沼</option>
+                    <option value="稲毛">稲毛</option>
+                    <option value="千葉">千葉</option>
+                </select>
+            </div>
+
+            <div class="selection-item">
+                <label>方向:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="direction" value="千葉方面" onchange="updateTableStructure()">
+                        千葉方面
+                    </label>
+                    <label>
+                        <input type="radio" name="direction" value="錦糸町方面" onchange="updateTableStructure()">
+                        錦糸町方面
+                    </label>
+                </div>
+                <span id="directionError" class="error"></span>
+            </div>
+        </div>
+
+        <!-- 時刻設定ボタン -->
+        <div class="button-area">
+            <button onclick="setCurrentTime()">現在時刻に設定</button>
+        </div>
+
+        <!-- 動的に生成される時刻表 -->
+        <table id="timeTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>緩行</th>
+                    <th>急行</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 行は動的に生成される（各行が駅名） -->
+            </tbody>
+        </table>
+
+        <!-- 操作ボタン -->
+        <div class="button-area">
+            <button onclick="updateTable()">予測計算</button>
+            <button onclick="resetTable()">リセット</button>
+        </div>
+
+        <!-- 初期化メッセージ -->
+        <div id="initialMessage" class="initial-message">
+            出発駅と方向を選択して、緩急分離運転の到着時刻を計算してください。
+        </div>
+
+        <script src="js/data.js"></script>
+        <script src="js/script.js"></script>
+
+        <!-- 初期化処理 -->
+        <script>
+            // ページ読み込み時の初期化
+            document.addEventListener('DOMContentLoaded', function () {
+                // デフォルトで錦糸町・千葉方面を選択
+                document.getElementById('departureStation').value = '錦糸町';
+                document.querySelector('input[name="direction"][value="千葉方面"]').checked = true;
+                updateTableStructure();
+            });
+        </script>
+    </body>
 
 </html>
